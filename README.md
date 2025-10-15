@@ -77,13 +77,12 @@ A API ficará disponível em:
 **GET /**
 http://127.0.0.1:5000/
 
-yaml
-Copiar código
+
+
 ✅ Resposta:
 Tudo OK!
 
-yaml
-Copiar código
+
 
 ---
 
@@ -91,12 +90,12 @@ Copiar código
 **GET /clientes**
 http://127.0.0.1:5000/clientes
 
-css
-Copiar código
+
+
 ✅ Retorna todos os clientes cadastrados no banco.
 
 Exemplo de resposta:
-```json
+
 [
   {
     "id_cliente": 1,
@@ -116,15 +115,15 @@ Exemplo de resposta:
 3️⃣ Buscar cliente por ID
 GET /clientes/<id_cliente>
 
-arduino
-Copiar código
+
+
 http://127.0.0.1:5000/clientes/1
 ✅ Retorna os dados do cliente com o ID informado.
 
 Exemplo de resposta:
 
-json
-Copiar código
+
+
 {
   "id_cliente": 1,
   "nome": "Ana Clara Souza",
@@ -135,13 +134,13 @@ Copiar código
 4️⃣ Adicionar novo cliente
 POST /clientes
 
-arduino
-Copiar código
+
+
 http://127.0.0.1:5000/clientes
 📤 Corpo (JSON):
 
-json
-Copiar código
+
+
 {
   "nome": "Lucas Santos",
   "email": "lucas@email.com",
@@ -151,8 +150,8 @@ Copiar código
 }
 ✅ Resposta:
 
-json
-Copiar código
+
+
 {
   "id_cliente": 21,
   "mensagem": "Cliente adicionado com sucesso!"
@@ -160,13 +159,13 @@ Copiar código
 5️⃣ Atualizar cliente existente
 PUT /clientes/<id_cliente>
 
-arduino
-Copiar código
+
+
 http://127.0.0.1:5000/clientes/3
 📤 Corpo (JSON):
 
-json
-Copiar código
+
+
 {
   "nome": "Carla Menezes",
   "email": "carla.menezes@email.com",
@@ -176,21 +175,21 @@ Copiar código
 }
 ✅ Resposta:
 
-json
-Copiar código
+
+
 {
   "mensagem": "Cliente atualizado com sucesso!"
 }
 6️⃣ Deletar um cliente
 DELETE /clientes/<id_cliente>
 
-arduino
-Copiar código
+
+
 http://127.0.0.1:5000/clientes/3
 ✅ Resposta:
 
-json
-Copiar código
+
+
 {
   "mensagem": "Cliente deletado com sucesso!"
 }
@@ -198,19 +197,19 @@ Copiar código
 POST /clientes/<id_cliente>/adicionar-milhas
 
 bash
-Copiar código
+
 http://127.0.0.1:5000/clientes/1/adicionar-milhas
 📤 Corpo (JSON):
 
-json
-Copiar código
+
+
 {
   "milhas": 2000
 }
 ✅ Resposta:
 
-json
-Copiar código
+
+
 {
   "mensagem": "2000 milhas adicionadas ao cliente 1"
 }
