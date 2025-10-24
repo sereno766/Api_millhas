@@ -1,4 +1,3 @@
-
 # 🧳 API DE GESTÃO DE MILHAS - FLASK
 
 **Autor:** Acalu  
@@ -30,6 +29,14 @@ Ela permite:
 
 ---
 
+## 📋 Pré-requisitos
+
+- Python 3.11 ou superior instalado
+- MySQL instalado e rodando
+- Permissão para criar banco de dados
+
+---
+
 ## 📁 Estrutura do Projeto
 
 ```
@@ -45,10 +52,12 @@ API_MILHAS/
 ├── routes/                  -> Rotas da API
 │   └── usuario_route.py
 │
-└── services/                -> Lógica e acesso ao banco
-└── usuario_service.py
-
-````
+├── services/                -> Lógica e acesso ao banco
+│   └── usuario_service.py
+│
+└── models/                  -> Modelos de dados (dataclasses)
+    └── usuario_model.py
+```
 
 ---
 
@@ -59,7 +68,7 @@ API_MILHAS/
 
 ```bash
 pip install -r requirements.txt
-````
+```
 
 Se o arquivo `requirements.txt` não existir, crie-o com o conteúdo abaixo:
 
@@ -71,7 +80,15 @@ mysql-connector-python
 3️⃣ **Crie o banco de dados** executando o script `DATA_BASE.sql` no MySQL.
 Ele cria o banco `DBMILHAS` e adiciona exemplos de clientes.
 
-4️⃣ **Execute a aplicação Flask:**
+```bash
+# Exemplo usando o MySQL CLI:
+mysql -u root -p < DATA_BASE.sql
+```
+
+4️⃣ **Configure a conexão com o banco**  
+Edite o arquivo `conn.py` com os dados do seu MySQL (host, usuário, senha, banco).
+
+5️⃣ **Execute a aplicação Flask:**
 
 ```bash
 python app.py
@@ -95,7 +112,12 @@ http://127.0.0.1:5000/
 ✅ **Resposta:**
 
 ```json
-Tudo OK!
+"Tudo OK!"
+```
+
+Exemplo curl:
+```bash
+curl http://127.0.0.1:5000/
 ```
 
 ---
@@ -116,6 +138,7 @@ http://127.0.0.1:5000/clientes
     "id_cliente": 1,
     "nome": "Ana Clara Souza",
     "email": "ana.souza@email.com",
+    "cartao": "Gold",
     "saldo_milhas": 35000,
     "destino_desejado": "Paris"
   },
@@ -123,10 +146,16 @@ http://127.0.0.1:5000/clientes
     "id_cliente": 2,
     "nome": "Bruno Henrique Lima",
     "email": "bruno.lima@email.com",
+    "cartao": "Silver",
     "saldo_milhas": 12000,
     "destino_desejado": "Rio de Janeiro"
   }
 ]
+```
+
+Exemplo curl:
+```bash
+curl http://127.0.0.1:5000/clientes
 ```
 
 ---
@@ -146,9 +175,15 @@ http://127.0.0.1:5000/clientes/1
   "id_cliente": 1,
   "nome": "Ana Clara Souza",
   "email": "ana.souza@email.com",
+  "cartao": "Gold",
   "saldo_milhas": 35000,
   "destino_desejado": "Paris"
 }
+```
+
+Exemplo curl:
+```bash
+curl http://127.0.0.1:5000/clientes/1
 ```
 
 ---
@@ -167,7 +202,7 @@ http://127.0.0.1:5000/clientes
 {
   "nome": "Lucas Santos",
   "email": "lucas@email.com",
-  "cartao": "9999-8888-7777-6666",
+  "cartao": "Gold",
   "saldo_milhas": 5000,
   "destino_desejado": "Lisboa"
 }
@@ -180,6 +215,13 @@ http://127.0.0.1:5000/clientes
   "id_cliente": 21,
   "mensagem": "Cliente adicionado com sucesso!"
 }
+```
+
+Exemplo curl:
+```bash
+curl -X POST http://127.0.0.1:5000/clientes \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"Lucas Santos","email":"lucas@email.com","cartao":"Gold","saldo_milhas":5000,"destino_desejado":"Lisboa"}'
 ```
 
 ---
@@ -198,7 +240,7 @@ http://127.0.0.1:5000/clientes/3
 {
   "nome": "Carla Menezes",
   "email": "carla.menezes@email.com",
-  "cartao": "3456-7890-1234-5678",
+  "cartao": "Gold",
   "saldo_milhas": 85000,
   "destino_desejado": "Nova York"
 }
@@ -210,6 +252,13 @@ http://127.0.0.1:5000/clientes/3
 {
   "mensagem": "Cliente atualizado com sucesso!"
 }
+```
+
+Exemplo curl:
+```bash
+curl -X PUT http://127.0.0.1:5000/clientes/3 \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"Carla Menezes","email":"carla.menezes@email.com","cartao":"Gold","saldo_milhas":85000,"destino_desejado":"Nova York"}'
 ```
 
 ---
@@ -228,6 +277,11 @@ http://127.0.0.1:5000/clientes/3
 {
   "mensagem": "Cliente deletado com sucesso!"
 }
+```
+
+Exemplo curl:
+```bash
+curl -X DELETE http://127.0.0.1:5000/clientes/3
 ```
 
 ---
@@ -256,6 +310,13 @@ http://127.0.0.1:5000/clientes/1/adicionar-milhas
 }
 ```
 
+Exemplo curl:
+```bash
+curl -X POST http://127.0.0.1:5000/clientes/1/adicionar-milhas \
+  -H "Content-Type: application/json" \
+  -d '{"milhas":2000}'
+```
+
 ---
 
 ## 🧠 Decisões de Design
@@ -266,7 +327,6 @@ http://127.0.0.1:5000/clientes/1/adicionar-milhas
 * `services/` → contém a lógica e consultas SQL
 * `conn.py` → gerencia a conexão com o banco MySQL
 
-O projeto utiliza **SQL direto (sem ORM)** para fins didáticos e clareza de aprendizado.
 
 ### Validações Implementadas
 
@@ -276,8 +336,17 @@ O projeto utiliza **SQL direto (sem ORM)** para fins didáticos e clareza de apr
 
 ---
 
+## 💡 Dicas
+
+- Edite `conn.py` para configurar host, usuário, senha e banco.
+- Use sempre JSON no corpo das requisições POST/PUT.
+- Teste os endpoints com ferramentas como Postman ou curl.
+- Para produção, proteja suas credenciais e utilize variáveis de ambiente.
+
+---
+
 ## 👨‍💻 Autor
 
-Desenvolvido por **Acalu**
+Desenvolvido por **Acalu**  
 📧 [acalusereno@hotmail.com](mailto:acalusereno@hotmail.com)
 
